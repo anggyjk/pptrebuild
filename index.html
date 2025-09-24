@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teori Bahasa dan Teori Pendukung Otomotif - Kelompok 10</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-bg: #1E1E1E;
+            --darker-bg: #121212;
+            --card-bg: #252525;
+            --accent-purple: #8A2BE2;
+            --accent-blue: #4169E1;
+            --text-primary: #F0F0F0;
+            --text-secondary: #A0A0A0;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--darker-bg);
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Figma Style */
+        .figma-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background-color: var(--dark-bg);
+            border-bottom: 1px solid #333;
+            height: 60px;
+            flex-shrink: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-tools {
+            display: flex;
+            gap: 16px;
+            position: relative;
+        }
+
+        .nav-tool {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: #2C2C2C;
+            position: relative;
+        }
+
+        .nav-tool:hover {
+            background-color: #3C3C3C;
+        }
+
+        /* Popup dropdown styles */
+        .popup-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            z-index: 1001;
+            display: none;
+            overflow: hidden;
+        }
+
+        .popup-header {
+            padding: 15px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popup-content {
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .popup-close {
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Settings popup */
+        .settings-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .settings-option:last-child {
+            border-bottom: none;
+        }
+
+        .settings-label {
+            font-size: 14px;
+        }
+
+        .settings-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background-color: #3C3C3C;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .toggle.active {
+            background-color: var(--accent-purple);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: var(--transition);
+        }
+
+        .toggle.active::after {
+            left: 22px;
+        }
+
+        /* Chat popup */
+        .chat-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: var(--border-radius);
+            max-width: 80%;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .message.user {
+            background-color: #3C3C3C;
+            align-self: flex-end;
+        }
+
+        .message.system {
+            background-color: #2C2C2C;
+            align-self: flex-start;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            background-color: #2C2C2C;
+            border: 1px solid #3C3C3C;
+            border-radius: var(--border-radius);
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+
+        .chat-input button {
+            background: var(--accent-purple);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+
+        .chat-input button:hover {
+            background: var(--accent-blue);
+        }
+
+        /* Share popup */
+        .share-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .share-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            background-color: #2C2C2C;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .share-option:hover {
+            background-color: #3C3C3C;
+        }
+
+        .share-icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .share-label {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .share-copy {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #2C2C2C;
+            border-radius: var(--border-radius);
+        }
+
+        .share-copy input {
+            flex: 1;
+            background-color: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 13px;
+            padding: 5px;
+        }
+
+        .share-copy button {
+            background: var(--accent-purple);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: var(--transition);
+        }
+
+        .share-copy button:hover {
+            background: var(--accent-blue);
+        }
+
+        /* Main content area */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Left sidebar */
+        .sidebar {
+            width: 240px;
+            background-color: var(--dark-bg);
+            border-right: 1px solid #333;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .layers {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .layer {
+            padding: 10px 12px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .layer.active {
+            background-color: #2C2C2C;
+            color: var(--accent-purple);
+        }
+
+        .layer:hover {
+            background-color: #2C2C2C;
+        }
+
+        .layer-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Canvas area */
+        .canvas-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            background-color: var(--darker-bg);
+        }
+
+        .slides-container {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        /* Scrollbar styling */
+        .slides-container::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .slides-container::-webkit-scrollbar-track {
+            background: #2C2C2C;
+            border-radius: 10px;
+        }
+
+        .slides-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--accent-purple), var(--accent-blue));
+            border-radius: 10px;
+        }
+
+        .slides-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #9933ff, #5580ff);
+        }
+
+        /* Slides */
+        .slide {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            scroll-snap-align: start;
+            flex-shrink: 0;
+        }
+
+        .slide-content {
+            max-width: 900px;
+            width: 100%;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent-purple), var(--accent-blue));
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            background-color: var(--dark-bg);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        ul {
+            text-align: left;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-size: 1.1rem;
+        }
+
+        .highlight-box {
+            background-color: #2C2C2C;
+            border-left: 4px solid var(--accent-purple);
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+            font-style: italic;
+            font-size: 1rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .team-member {
+            background-color: #2C2C2C;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        .member-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .member-nim {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .concept-item {
+            background-color: #2C2C2C;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            border-top: 3px solid var(--accent-purple);
+        }
+
+        .concept-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--accent-blue);
+            font-size: 1.1rem;
+        }
+
+        /* Right sidebar */
+        .properties {
+            width: 280px;
+            background-color: var(--dark-bg);
+            border-left: 1px solid #333;
+            padding: 24px 16px;
+            flex-shrink: 0;
+        }
+
+        .property-group {
+            margin-bottom: 24px;
+        }
+
+        .property-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .property-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .property-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .property-value {
+            width: 60px;
+            height: 32px;
+            background-color: #2C2C2C;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 16px;
+            z-index: 100;
+            background-color: var(--dark-bg);
+            padding: 12px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .nav-button:active {
+            transform: translateY(0);
+        }
+
+        /* Progress indicator */
+        .progress-indicator {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 50;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #3C3C3C;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .progress-dot.active {
+            background-color: var(--accent-purple);
+            transform: scale(1.2);
+        }
+
+        .progress-dot:hover {
+            background-color: var(--accent-blue);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-content {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Background elements */
+        .bg-element {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .bg-element-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-purple);
+            top: -150px;
+            right: -150px;
+        }
+
+        .bg-element-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--accent-blue);
+            bottom: -100px;
+            left: -100px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 200px;
+            }
+            .properties {
+                width: 240px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .sidebar, .properties {
+                display: none;
+            }
+            .slide-content {
+                padding: 20px;
+            }
+            .slide {
+                padding: 20px 10px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.7rem;
+            }
+            .team-grid, .concept-grid {
+                grid-template-columns: 1fr;
+            }
+            p, li {
+                font-size: 1rem;
+            }
+            .progress-indicator {
+                right: 10px;
+            }
+        }
+
+        /* Tambahan untuk konten panjang */
+        .scrollable-content {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .scrollable-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-track {
+            background: #2C2C2C;
+            border-radius: 10px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-thumb {
+            background: var(--accent-purple);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header dengan toolbar yang dapat diklik -->
+    <div class="figma-header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-project-diagram"></i>
+            </div>
+            <span>Teori Bahasa & Otomata - Kelompok 10</span>
+        </div>
+        <div class="nav-tools">
+            <div class="nav-tool" id="settingsTool">
+                <i class="fas fa-sliders-h"></i>
+                <div class="popup-dropdown" id="settingsPopup">
+                    <div class="popup-header">
+                        <span>Pengaturan Presentasi</span>
+                        <span class="popup-close" id="settingsClose">&times;</span>
+                    </div>
+                    <div class="popup-content">
+                        <div class="settings-option">
+                            <span class="settings-label">Mode Gelap</span>
+                            <div class="settings-control">
+                                <span>Off</span>
+                                <div class="toggle"></div>
+                                <span>On</span>
+                            </div>
+                        </div>
+                        <div class="settings-option">
+                            <span class="settings-label">Auto-scroll</span>
+                            <div class="settings-control">
+                                <span>Off</span>
+                                <div class="toggle"></div>
+                                <span>On</span>
+                            </div>
+                        </div>
+                        <div class="settings-option">
+                            <span class="settings-label">Efek Transisi</span>
+                            <div class="settings-control">
+                                <span>Off</span>
+                                <div class="toggle active"></div>
+                                <span>On</span>
+                            </div>
+                        </div>
+                        <div class="settings-option">
+                            <span class="settings-label">Highlight Kursor</span>
+                            <div class="settings-control">
+                                <span>Off</span>
+                                <div class="toggle"></div>
+                                <span>On</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-tool" id="chatTool">
+                <i class="fas fa-comment"></i>
+                <div class="popup-dropdown" id="chatPopup">
+                    <div class="popup-header">
+                        <span>Chat Presentasi</span>
+                        <span class="popup-close" id="chatClose">&times;</span>
+                    </div>
+                    <div class="popup-content">
+                        <div class="chat-messages">
+                            <div class="message system">
+                                <strong>System:</strong> Selamat datang di chat presentasi! Silakan ajukan pertanyaan atau berikan komentar.
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="chatInput" placeholder="Ketik pesan Anda...">
+                            <button id="sendMessage">Kirim</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-tool" id="shareTool">
+                <i class="fas fa-share-alt"></i>
+                <div class="popup-dropdown" id="sharePopup">
+                    <div class="popup-header">
+                        <span>Bagikan Presentasi</span>
+                        <span class="popup-close" id="shareClose">&times;</span>
+                    </div>
+                    <div class="popup-content">
+                        <div class="share-options">
+                            <div class="share-option" id="shareLink">
+                                <div class="share-icon">
+                                    <i class="fas fa-link"></i>
+                                </div>
+                                <span class="share-label">Salin Tautan</span>
+                            </div>
+                            <div class="share-option" id="shareEmail">
+                                <div class="share-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <span class="share-label">Kirim Email</span>
+                            </div>
+                            <div class="share-option" id="shareWhatsApp">
+                                <div class="share-icon">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <span class="share-label">Bagikan ke WhatsApp</span>
+                            </div>
+                        </div>
+                        <div class="share-copy">
+                            <input type="text" id="shareUrl" value="https://kelompok10-teori-bahasa-otomata.presentasi" readonly>
+                            <button id="copyUrl">Salin</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="layers">
+                <div class="layer active">
+                    <div class="layer-icon"><i class="fas fa-layer-group"></i></div>
+                    <span>Slide 1: Judul & Anggota</span>
+                </div>
+                <div class="layer">
+                    <div class="layer-icon"><i class="fas fa-layer-group"></i></div>
+                    <span>Slide 2: Anggota Kelompok</span>
+                </div>
+                <div class="layer">
+                    <div class="layer-icon"><i class="fas fa-layer-group"></i></div>
+                    <span>Slide 3: Konsep Inti</span>
+                </div>
+                <div class="layer">
+                    <div class="layer-icon"><i class="fas fa-layer-group"></i></div>
+                    <span>Slide 4: Teori Himpunan</span>
+                </div>
+                <div class="layer">
+                    <div class="layer-icon"><i class="fas fa-layer-group"></i></div>
+                    <span>Slide 5: Teori Fungsi</span>
+                </div>
+                <div class="layer">
+                    <div class="layer-icon"><i class="fas fa-layer-group"></i></div>
+                    <span>Slide 6: Teori Graf</span>
+                </div>
+                <div class="layer">
+                    <div class="layer-icon"><i class="fas fa-layer-group"></i></div>
+                    <span>Slide 7: Keterkaitan Konsep</span>
+                </div>
+                <div class="layer">
+                    <div class="layer-icon"><i class="fas fa-layer-group"></i></div>
+                    <span>Slide 8: Referensi</span>
+                </div>
+            </div>
+            <div class="user-section">
+                <div class="layer">
+                    <div class="layer-icon"><i class="fas fa-user"></i></div>
+                    <span>Kelompok 10</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canvas Area -->
+        <div class="canvas-container">
+            <div class="slides-container" id="slidesContainer">
+                <!-- Slide 1: Judul -->
+                <section class="slide active">
+                    <div class="bg-element bg-element-1"></div>
+                    <div class="bg-element bg-element-2"></div>
+                    <div class="slide-content">
+                        <span class="slide-number">1/8</span>
+                        <h1>Teori Bahasa dan Teori Pendukung Otomata</h1>
+                        <p>Kelompok 10 - Teori Bahasa dan Otomata - Kelas H</p>
+                        <p>Gunakan tombol navigasi atau scroll untuk melanjutkan presentasi</p>
+                    </div>
+                </section>
+
+                <!-- Slide 2: Anggota Kelompok -->
+                <section class="slide">
+                    <div class="slide-content">
+                        <span class="slide-number">2/8</span>
+                        <h2>Anggota Kelompok 10</h2>
+                        <div class="team-grid">
+                            <div class="team-member">
+                                <div class="member-name">Sadaika Nursadig</div>
+                                <div class="member-nim">202410370110398</div>
+                            </div>
+                            <div class="team-member">
+                                <div class="member-name">Anggy Jogo Kurniawan</div>
+                                <div class="member-nim">202410370110389</div>
+                            </div>
+                            <div class="team-member">
+                                <div class="member-name">Mario Maulana</div>
+                                <div class="member-nim">202410370110399</div>
+                            </div>
+                            <div class="team-member">
+                                <div class="member-name">Muhammad Hafidzal Rahmadi</div>
+                                <div class="member-nim">202410370110392</div>
+                            </div>
+                            <div class="team-member">
+                                <div class="member-name">Muhammad Aditya Wibawa</div>
+                                <div class="member-nim">202410370110407</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 3: Konsep Inti -->
+                <section class="slide">
+                    <div class="slide-content">
+                        <span class="slide-number">3/8</span>
+                        <h2>Konsep Inti: Alfabet, String, Tata Bahasa, dan Bahasa</h2>
+                        <div class="scrollable-content">
+                            <div class="highlight-box">
+                                <h3>Alfabet (Σ)</h3>
+                                <p>Kumpulan dasar simbol-simbol, seperti {a, b, c} atau {0, 1}.</p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h3>String</h3>
+                                <p>Urutan simbol terbatas yang diambil dari suatu Alfabet, contohnya, "hello sodik".</p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h3>String Kosong (ε)</h3>
+                                <p>Sebuah string unik yang tidak mengandung simbol sama sekali.</p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h3>Tata Bahasa (G)</h3>
+                                <p>Satu set aturan yang mendefinisikan bagaimana string dibentuk dalam suatu Bahasa, terstruktur sebagai (V, Σ, R, S).</p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h3>Bahasa (L)</h3>
+                                <p>Seluruh koleksi string yang dapat dihasilkan oleh suatu Tata Bahasa tertentu.</p>
+                            </div>
+                            
+                            <p>Pada intinya, sebuah Automata adalah mesin abstrak yang beroperasi secara otonom dengan mengikuti seperangkat aturan yang telah ditentukan.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 4: Teori Himpunan -->
+                <section class="slide">
+                    <div class="slide-content">
+                        <span class="slide-number">4/8</span>
+                        <h2>Dasar-Dasar Teori Himpunan</h2>
+                        <div class="scrollable-content">
+                            <p>Teori himpunan sangat penting untuk mendefinisikan blok bangunan (building blocks) bahasa dan automata. Sebuah himpunan (set) adalah kumpulan objek yang berbeda (distinct objects).</p>
+                            
+                            <h3>Operasi Himpunan Kunci:</h3>
+                            <ul>
+                                <li><strong>Union (Gabungan):</strong> Menggabungkan semua elemen dari beberapa himpunan.</li>
+                                <li><strong>Intersection (Irisan):</strong> Mengidentifikasi elemen umum yang dibagi antara himpunan.</li>
+                                <li><strong>Complement (Komplement):</strong> Mencakup elemen yang tidak ada dalam himpunan tertentu.</li>
+                            </ul>
+                            
+                            <div class="highlight-box">
+                                <p>Operasi-operasi ini fundamental untuk menjelaskan secara formal alphabets (alfabet) dan languages (bahasa).</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 5: Teori Fungsi -->
+                <section class="slide">
+                    <div class="slide-content">
+                        <span class="slide-number">5/8</span>
+                        <h2>Peran Teori Fungsi</h2>
+                        <div class="scrollable-content">
+                            <p>Fungsi menyediakan mekanisme untuk mendefinisikan hubungan antar elemen di berbagai himpunan (set).</p>
+                            
+                            <div class="highlight-box">
+                                <p>Dalam automata, fungsi sangat penting untuk merepresentasikan transisi keadaan (state transitions) berdasarkan masukan (input), membimbing perilaku mesin.</p>
+                            </div>
+                            
+                            <p>Fungsi memetakan masukan (input) dari satu himpunan (misalnya, keadaan saat ini/current state dan simbol masukan/input symbol) ke keluaran (output) di himpunan lain (misalnya, keadaan berikutnya/next state).</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 6: Teori Graf -->
+                <section class="slide">
+                    <div class="slide-content">
+                        <span class="slide-number">6/8</span>
+                        <h2>Teori Graf dalam Pemodelan Otomata</h2>
+                        <div class="scrollable-content">
+                            <p>Graf, yang terdiri dari titik-titik (nodes/vertices) dan garis penghubung (edges), adalah alat yang ampuh untuk memvisualisasikan dan memodelkan mesin komputasi.</p>
+                            
+                            <h3>Aplikasi dalam Otomata:</h3>
+                            <ul>
+                                <li><strong>Titik (Nodes):</strong> Mempresentasikan berbagai keadaan (states) dari otomata.</li>
+                                <li><strong>Garis Penghubung (Edges):</strong> Menggambarkan transisi (transitions) antar keadaan (states) yang dipicu oleh masukan (inputs) tertentu.</li>
+                            </ul>
+                            
+                            <div class="highlight-box">
+                                <p>Representasi visual ini membantu memahami perilaku dinamis dan alur dalam otomata.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 7: Keterkaitan Konsep -->
+                <section class="slide">
+                    <div class="slide-content">
+                        <span class="slide-number">7/8</span>
+                        <h2>Keterkaitan Konsep</h2>
+                        <div class="scrollable-content">
+                            <div class="concept-grid">
+                                <div class="concept-item">
+                                    <div class="concept-title">Tata Bahasa (Grammar)</div>
+                                    <p>Menggunakan aturan untuk menghasilkan semua string yang valid.</p>
+                                </div>
+                                <div class="concept-item">
+                                    <div class="concept-title">Bahasa (Language)</div>
+                                    <p>Kumpulan semua string yang dihasilkan oleh tata bahasa.</p>
+                                </div>
+                                <div class="concept-item">
+                                    <div class="concept-title">Alfabet (Alphabet)</div>
+                                    <p>Menyediakan simbol-simbol dasar untuk membentuk semua string.</p>
+                                </div>
+                                <div class="concept-item">
+                                    <div class="concept-title">Automata</div>
+                                    <p>Menggunakan fungsi dan graf untuk mengenali serta memproses bahasa.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <p>Konsep-konsep ini memberikan tulang punggung yang kokoh untuk memahami sifat komputasi dan pemrosesan bahasa.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 8: Referensi -->
+                <section class="slide">
+                    <div class="slide-content">
+                        <span class="slide-number">8/8</span>
+                        <h2>Referensi</h2>
+                        <div class="scrollable-content">
+                            <div class="highlight-box">
+                                <p><strong>Sipser, M. (2012).</strong> Introduction to the Theory of Computation (3rd ed.). Cengage Learning.<br>
+                                <a href="https://fuuu.be/polytech/INFOF408/Introduction-To-The-Theory-Of-Computation-Michael-Sipser.pdf" style="color: var(--accent-blue); text-decoration: none;">https://fuuu.be/polytech/INFOF408/Introduction-To-The-Theory-Of-Computation-Michael-Sipser.pdf</a></p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <p><strong>Hopcroft, J. E., Motwani, R., & Ullman, J. D. (2006).</strong> Introduction to Automata Theory, Languages, and Computation (3rd ed.). Addison-Wesley.<br>
+                                <a href="https://mrce.in/ebooks/Automata%20Theory,%20Languages,%20&%20Computation%20Introduction%203rd%20Ed.pdf" style="color: var(--accent-blue); text-decoration: none;">https://mrce.in/ebooks/Automata%20Theory,%20Languages,%20&%20Computation%20Introduction%203rd%20Ed.pdf</a></p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <p><strong>Soyusiawaty, D., & Mardhia, M. M. (2019).</strong> Buku Ajar Mata Kuliah Teori Bahasa dan Automata. Program Studi Teknik Informatika, Universitas Ahmad Dahlan.<br>
+                                <a href="https://eprints.uad.ac.id/22018/1/Lampiran%20B6b.pdf" style="color: var(--accent-blue); text-decoration: none;">https://eprints.uad.ac.id/22018/1/Lampiran%20B6b.pdf</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="progress-indicator" id="progressIndicator">
+            <!-- Dots will be added by JavaScript -->
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="properties">
+            <div class="property-group">
+                <div class="property-title">
+                    <i class="fas fa-paint-brush"></i>
+                    <span>Design Properties</span>
+                </div>
+                <div class="property-item">
+                    <div class="property-label">Background</div>
+                    <div class="property-value">#121212</div>
+                </div>
+                <div class="property-item">
+                    <div class="property-label">Text Color</div>
+                    <div class="property-value">#F0F0F0</div>
+                </div>
+                <div class="property-item">
+                    <div class="property-label">Accent</div>
+                    <div class="property-value">#8A2BE2</div>
+                </div>
+            </div>
+            <div class="property-group">
+                <div class="property-title">
+                    <i class="fas fa-code"></i>
+                    <span>Code</span>
+                </div>
+                <div class="property-item">
+                    <div class="property-label">HTML</div>
+                    <div class="property-value">100%</div>
+                </div>
+                <div class="property-item">
+                    <div class="property-label">CSS</div>
+                    <div class="property-value">100%</div>
+                </div>
+                <div class="property-item">
+                    <div class="property-label">JS</div>
+                    <div class="property-value">100%</div>
+                </div>
+            </div>
+            <div class="property-group">
+                <div class="property-title">
+                    <i class="fas fa-book"></i>
+                    <span>Materi</span>
+                </div>
+                <div class="property-item">
+                    <div class="property-label">Slide</div>
+                    <div class="property-value">8</div>
+                </div>
+                <div class="property-item">
+                    <div class="property-label">Anggota</div>
+                    <div class="property-value">5</div>
+                </div>
+                <div class="property-item">
+                    <div class="property-label">Referensi</div>
+                    <div class="property-value">3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+        <button class="nav-button" id="prevButton">
+            <i class="fas fa-arrow-left"></i> Sebelumnya
+        </button>
+        <button class="nav-button" id="nextButton">
+            Selanjutnya <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slidesContainer = document.getElementById('slidesContainer');
+            const slides = document.querySelectorAll('.slide');
+            const layers = document.querySelectorAll('.layer');
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            const progressIndicator = document.getElementById('progressIndicator');
+            
+            // Toolbar elements
+            const settingsTool = document.getElementById('settingsTool');
+            const chatTool = document.getElementById('chatTool');
+            const shareTool = document.getElementById('shareTool');
+            const settingsPopup = document.getElementById('settingsPopup');
+            const chatPopup = document.getElementById('chatPopup');
+            const sharePopup = document.getElementById('sharePopup');
+            const settingsClose = document.getElementById('settingsClose');
+            const chatClose = document.getElementById('chatClose');
+            const shareClose = document.getElementById('shareClose');
+            const chatInput = document.getElementById('chatInput');
+            const sendMessage = document.getElementById('sendMessage');
+            const shareLink = document.getElementById('shareLink');
+            const shareEmail = document.getElementById('shareEmail');
+            const shareWhatsApp = document.getElementById('shareWhatsApp');
+            const copyUrl = document.getElementById('copyUrl');
+            const shareUrl = document.getElementById('shareUrl');
+            const toggles = document.querySelectorAll('.toggle');
+            
+            let currentSlide = 0;
+            let isTransitioning = false;
+            let activePopup = null;
+
+            // Create progress dots
+            slides.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => {
+                    updateActiveSlide(index);
+                });
+                progressIndicator.appendChild(dot);
+            });
+
+            const progressDots = document.querySelectorAll('.progress-dot');
+
+            function updateActiveSlide(index) {
+                if (isTransitioning) return;
+                
+                isTransitioning = true;
+                
+                if (index < 0) index = 0;
+                if (index >= slides.length) index = slides.length - 1;
+                
+                slides.forEach(slide => slide.classList.remove('active'));
+                layers.forEach(layer => layer.classList.remove('active'));
+                progressDots.forEach(dot => dot.classList.remove('active'));
+                
+                slides[index].classList.add('active');
+                layers[index].classList.add('active');
+                progressDots[index].classList.add('active');
+                
+                // Scroll to the slide
+                slidesContainer.scrollTo({
+                    top: slides[index].offsetTop,
+                    behavior: 'smooth'
+                });
+                
+                currentSlide = index;
+                
+                setTimeout(() => {
+                    isTransitioning = false;
+                }, 500);
+            }
+
+            layers.forEach((layer, index) => {
+                layer.addEventListener('click', function() {
+                    updateActiveSlide(index);
+                });
+            });
+
+            prevButton.addEventListener('click', function() {
+                updateActiveSlide(currentSlide - 1);
+            });
+
+            nextButton.addEventListener('click', function() {
+                updateActiveSlide(currentSlide + 1);
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+                    e.preventDefault();
+                    updateActiveSlide(currentSlide + 1);
+                } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                    e.preventDefault();
+                    updateActiveSlide(currentSlide - 1);
+                } else if (e.key === 'Home') {
+                    e.preventDefault();
+                    updateActiveSlide(0);
+                } else if (e.key === 'End') {
+                    e.preventDefault();
+                    updateActiveSlide(slides.length - 1);
+                }
+            });
+
+            // Scroll detection
+            let scrollTimeout;
+            slidesContainer.addEventListener('scroll', function() {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(function() {
+                    let closestSlide = 0;
+                    let closestDistance = Math.abs(slides[0].getBoundingClientRect().top);
+                    
+                    for (let i = 1; i < slides.length; i++) {
+                        const distance = Math.abs(slides[i].getBoundingClientRect().top);
+                        if (distance < closestDistance) {
+                            closestDistance = distance;
+                            closestSlide = i;
+                        }
+                    }
+                    
+                    if (closestSlide !== currentSlide) {
+                        updateActiveSlide(closestSlide);
+                    }
+                }, 150);
+            });
+
+            // Toolbar functions
+            function showPopup(popup) {
+                // Hide all popups first
+                settingsPopup.style.display = 'none';
+                chatPopup.style.display = 'none';
+                sharePopup.style.display = 'none';
+                
+                // Show the selected popup
+                popup.style.display = 'block';
+                activePopup = popup;
+            }
+
+            function hideAllPopups() {
+                settingsPopup.style.display = 'none';
+                chatPopup.style.display = 'none';
+                sharePopup.style.display = 'none';
+                activePopup = null;
+            }
+
+            settingsTool.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (activePopup === settingsPopup) {
+                    hideAllPopups();
+                } else {
+                    showPopup(settingsPopup);
+                }
+            });
+
+            chatTool.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (activePopup === chatPopup) {
+                    hideAllPopups();
+                } else {
+                    showPopup(chatPopup);
+                }
+            });
+
+            shareTool.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (activePopup === sharePopup) {
+                    hideAllPopups();
+                } else {
+                    showPopup(sharePopup);
+                }
+            });
+
+            settingsClose.addEventListener('click', function(e) {
+                e.stopPropagation();
+                hideAllPopups();
+            });
+
+            chatClose.addEventListener('click', function(e) {
+                e.stopPropagation();
+                hideAllPopups();
+            });
+
+            shareClose.addEventListener('click', function(e) {
+                e.stopPropagation();
+                hideAllPopups();
+            });
+
+            // Toggle functionality
+            toggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+            });
+
+            // Chat functionality
+            sendMessage.addEventListener('click', function() {
+                const message = chatInput.value.trim();
+                if (message) {
+                    const chatMessages = document.querySelector('.chat-messages');
+                    const newMessage = document.createElement('div');
+                    newMessage.className = 'message user';
+                    newMessage.innerHTML = `<strong>Anda:</strong> ${message}`;
+                    chatMessages.appendChild(newMessage);
+                    chatInput.value = '';
+                    
+                    // Auto scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Simulate a response after a delay
+                    setTimeout(() => {
+                        const response = document.createElement('div');
+                        response.className = 'message system';
+                        response.innerHTML = `<strong>System:</strong> Terima kasih atas komentar Anda di slide ${currentSlide + 1}.`;
+                        chatMessages.appendChild(response);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 1000);
+                }
+            });
+
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage.click();
+                }
+            });
+
+            // Share functionality
+            shareLink.addEventListener('click', function() {
+                shareUrl.select();
+                shareUrl.setSelectionRange(0, 99999);
+                document.execCommand('copy');
+                alert('Tautan berhasil disalin!');
+            });
+
+            copyUrl.addEventListener('click', function() {
+                shareUrl.select();
+                shareUrl.setSelectionRange(0, 99999);
+                document.execCommand('copy');
+                alert('Tautan presentasi berhasil disalin!');
+            });
+
+            shareEmail.addEventListener('click', function() {
+                const subject = encodeURIComponent('Presentasi Teori Bahasa dan Otomata - Kelompok 10');
+                const body = encodeURIComponent(`Halo,\n\nSaya ingin berbagi presentasi Teori Bahasa dan Otomata dari Kelompok 10:\n${shareUrl.value}\n\nSemoga bermanfaat!`);
+                window.open(`mailto:?subject=${subject}&body=${body}`);
+            });
+
+            shareWhatsApp.addEventListener('click', function() {
+                const text = encodeURIComponent(`Halo! Saya ingin berbagi presentasi Teori Bahasa dan Otomata dari Kelompok 10: ${shareUrl.value}`);
+                window.open(`https://wa.me/?text=${text}`);
+            });
+
+            // Close popups when clicking outside
+            document.addEventListener('click', function() {
+                hideAllPopups();
+            });
+
+            // Prevent popup close when clicking inside
+            settingsPopup.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            chatPopup.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            sharePopup.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // Initialize
+            updateActiveSlide(0);
+        });
+    </script>
+</body>
+</html>
